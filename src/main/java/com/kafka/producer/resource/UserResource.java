@@ -1,5 +1,7 @@
 package com.kafka.producer.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -14,6 +16,8 @@ import com.kafka.producer.model.User;
 @RequestMapping("/kafka")
 public class UserResource {
 	
+	private static final Logger logger = LoggerFactory.getLogger(UserResource.class);
+	
     @Autowired
     KafkaTemplate<String, User> kafkaTemplate;
 
@@ -24,6 +28,7 @@ public class UserResource {
         try {
 			kafkaTemplate.send(TOPIC, new User(id, "Narendar", "Enterprise Services" , 50000.00));
 		} catch (Exception e) {
+			logger.error("Exception :: "+e.getMessage());
 			e.printStackTrace();
 		}
        return "Published Message Successfully...";
